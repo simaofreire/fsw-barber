@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL")
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -35,16 +35,16 @@ model BarbershopService {
   imageUrl     String
   price        Decimal    @db.Decimal(10, 2)
   barbershopId String
-  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   bookings     Booking[]
 }
 
 model Booking {
   id         String            @id @default(uuid())
   userId     String
-  user       User              @relation(fields: [userId], references: [id])
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   serviceId  String
-  service    BarbershopService @relation(fields: [serviceId], references: [id])
+  service    BarbershopService @relation(fields: [serviceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   date       DateTime
   created_at DateTime          @default(now())
   updated_at DateTime          @updatedAt

@@ -4,6 +4,10 @@ const prisma = new PrismaClient();
 
 async function seedDatabase() {
   try {
+    // await prisma.barbershop.deleteMany({});
+    // await prisma.barbershopService.deleteMany({});
+    // await prisma.$disconnect();
+    // return;
     const images = [
       'https://utfs.io/f/c97a2dc9-cf62-468b-a851-bfd2bdde775f-16p.png',
       'https://utfs.io/f/45331760-899c-4b4b-910e-e00babb6ed81-16q.png',
