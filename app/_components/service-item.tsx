@@ -28,7 +28,7 @@ const ServiceItem = ({ service }: ServiceItemProps) => {
               {Intl.NumberFormat("pt-BR", {
                 style: "currency",
                 currency: "BRL",
-              }).format(+service.price / 100)}
+              }).format(+service.price)}
             </p>
             <Button variant="secondary" size="sm">
               Reservar
