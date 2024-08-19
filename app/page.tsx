@@ -1,10 +1,9 @@
-import { SearchIcon } from "lucide-react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import { BookingItem } from "./_components/booking-item"
 import { Header } from "./_components/header"
+import Searchbar from "./_components/searchbar"
 import { Button } from "./_components/ui/button"
-import { Input } from "./_components/ui/input"
 import { quickSearchOptions } from "./_constants/quick-search"
 import { db } from "./_lib/prisma"
 
@@ -18,18 +17,21 @@ const Home = async () => {
     orderBy: { name: "desc" },
   })
 
+  const date = new Date().toLocaleDateString("pt-BR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  })
+
   return (
     <div>
       <Header />
       <div className="p-5">
         <h2 className="text-xl font-bold">Olá, Simão</h2>
-        <p>Segunda-feira, 01 de Agosto</p>
+        <p>{date}</p>
 
-        <div className="mt-6 flex items-center gap-2">
-          <Input placeholder="Search" />
-          <Button>
-            <SearchIcon />
-          </Button>
+        <div className="mt-6">
+          <Searchbar />
         </div>
 
         <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
