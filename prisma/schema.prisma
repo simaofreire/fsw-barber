@@ -93,7 +93,7 @@ model BarbershopService {
   name         String
   description  String
   imageUrl     String
-  price        Decimal    @db.Decimal(10, 2)
+  price        Float      @default(0)
   barbershopId String
   barbershop   Barbershop @relation(fields: [barbershopId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   bookings     Booking[]
