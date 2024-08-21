@@ -57,6 +57,8 @@ const getTimeList = (bookings: Booking[]) => {
     const hour = +t.split(":")[0]
     const minutes = +t.split(":")[1]
 
+    // const isTimePast = set(new Date(), { hours: hour, minutes }).getTime() < Date.now()
+
     const hasBookingOnCurrentTime = bookings.some(
       (b) => b.date.getHours() === hour && b.date.getMinutes() === minutes,
     )
@@ -115,7 +117,6 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
     try {
       createBooking({
         serviceId: service.id,
-        userId: (data?.user as { id: string }).id,
         date,
       })
 
