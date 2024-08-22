@@ -1,5 +1,6 @@
 "use server"
 import { endOfDay, startOfDay } from "date-fns"
+import { revalidatePath } from "next/cache"
 import { db } from "../_lib/prisma"
 
 interface GetBookingsProps {
@@ -8,7 +9,7 @@ interface GetBookingsProps {
 }
 
 export const getBookings = async ({ date }: GetBookingsProps) => {
-  return await db.booking.findMany({
+  await db.booking.findMany({
     where: {
       date: {
         lte: endOfDay(date),
@@ -16,4 +17,7 @@ export const getBookings = async ({ date }: GetBookingsProps) => {
       },
     },
   })
+
+  revalidatePath("/bookings", "page")
+  revalidatePath("/", "page")
 }
