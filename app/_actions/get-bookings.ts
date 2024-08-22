@@ -4,12 +4,11 @@ import { revalidatePath } from "next/cache"
 import { db } from "../_lib/prisma"
 
 interface GetBookingsProps {
-  serviceId?: string
   date: Date
 }
 
 export const getBookings = async ({ date }: GetBookingsProps) => {
-  await db.booking.findMany({
+  const bookings = await db.booking.findMany({
     where: {
       date: {
         lte: endOfDay(date),
@@ -20,4 +19,6 @@ export const getBookings = async ({ date }: GetBookingsProps) => {
 
   revalidatePath("/bookings", "page")
   revalidatePath("/", "page")
+
+  return bookings
 }

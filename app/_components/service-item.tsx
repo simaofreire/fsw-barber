@@ -45,9 +45,9 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
 
     const fetchBookings = async () => {
       const bookings = await getBookings({
-        serviceId: service.id,
         date: selectedDay,
       })
+
       setDayBookings(bookings)
     }
     fetchBookings()
