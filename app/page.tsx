@@ -1,3 +1,4 @@
+import { getServerSession } from "next-auth"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
@@ -6,6 +7,7 @@ import { Header } from "./_components/header"
 import Searchbar from "./_components/searchbar"
 import { Button } from "./_components/ui/button"
 import { quickSearchOptions } from "./_constants/quick-search"
+import { authOptions } from "./_lib/auth"
 import { db } from "./_lib/prisma"
 
 const BarbershopItem = dynamic(() => import("./_components/barbershop-item"), {
@@ -13,10 +15,19 @@ const BarbershopItem = dynamic(() => import("./_components/barbershop-item"), {
 })
 
 const Home = async () => {
+  const session = await getServerSession(authOptions)
   const barbershops = await db.barbershop.findMany({ orderBy: { name: "asc" } })
   const popularBarbershops = await db.barbershop.findMany({
     orderBy: { name: "desc" },
   })
+
+  const confirmedBookings = session?.user
+    ? await db.booking.findMany({
+        where: { userId: (session?.user as any).id, date: { gte: new Date() } },
+        include: { service: { include: { barbershop: true } } },
+        orderBy: { date: "asc" },
+      })
+    : []
 
   const date = new Date().toLocaleDateString("pt-BR", {
     weekday: "long",
@@ -65,7 +76,14 @@ const Home = async () => {
           />
         </div>
 
-        <BookingItem />
+        <h2 className="mb-3 mt-6 font-bold uppercase text-gray-400">
+          Agendamentos
+        </h2>
+        <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+          {confirmedBookings.map((b) => (
+            <BookingItem key={b.id} booking={b} />
+          ))}
+        </div>
 
         <h2 className="mb-3 mt-6 font-bold uppercase text-gray-400">
           Recomendados
